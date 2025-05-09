@@ -1,8 +1,17 @@
-import React from 'react';
-import logo from '/Users/kathuskanthavarajah/Developer/capstone/PocketManager/src/assets/PM logo.png';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import logo from '../assets/PM logo.png';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext.jsx';
 
 export const Header = () => {
+  const { userFullName, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <header className='p-5 flex fixed w-full top-0 left-0 bg-[#2A4D6E] pb-10 z-50 ml-0 mt-0 shadow-lg shadow-emerald-50'>
       <Link to='/home' className='flex items-center'>
@@ -25,16 +34,31 @@ export const Header = () => {
       />
 
       <nav className='flex right-24 top-8 items-center'>
-        <Link to='/signup'>
-          <h3 className='text-white text-2xl hover:cursor-pointer absolute right-32 top-8 hover:text-[#7886C7] rounded-md'>
-            Register
-          </h3>
-        </Link>
-        <Link to='/login'>
-          <h3 className='text-white text-2xl hover:cursor-pointer absolute right-16 top-8 hover:text-[#7886C7] rounded-md'>
-            Login
-          </h3>
-        </Link>
+        {userFullName ? (
+          <>
+            <h3 className='text-white text-2xl absolute right-32 top-8'>
+              Hello, {userFullName}
+            </h3>
+            <button
+              onClick={handleLogout}
+              className='text-white text-2xl absolute right-10 top-8 hover:text-[#FF7F7F]'>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to='/signup'>
+              <h3 className='text-white text-2xl absolute right-32 top-8 hover:text-[#7886C7] rounded-md'>
+                Register
+              </h3>
+            </Link>
+            <Link to='/login'>
+              <h3 className='text-white text-2xl absolute right-16 top-8 hover:text-[#7886C7] rounded-md'>
+                Login
+              </h3>
+            </Link>
+          </>
+        )}
       </nav>
     </header>
   );

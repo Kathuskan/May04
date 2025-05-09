@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext.jsx';
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const { login } = useContext(AuthContext);
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -54,8 +53,10 @@ export const Login = () => {
       if (!response.ok) throw new Error(data.message || 'Login failed');
 
       localStorage.setItem('authToken', data.token);
+      login(`${data.user.firstName} ${data.user.lastName}`);
       alert("Login successful!");
       navigate('/dashboard');
+
     } catch (error) {
       setErrors({ server: error.message });
     } finally {
@@ -101,19 +102,11 @@ export const Login = () => {
             {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
           </div>
 
-          <button
-            type="submit"
-            className={buttonStyle}
-            disabled={isSubmitting}
-          >
+          <button type="submit" className={buttonStyle} disabled={isSubmitting}>
             {isSubmitting ? 'Logging in...' : 'Sign In'}
           </button>
 
-          <button
-            type="button"
-            onClick={() => navigate('/reset-password')}
-            className="mt-4 text-[#2D336B] hover:text-[#7886C7] text-sm"
-          >
+          <button type="button" onClick={() => navigate('/reset-password')} className="mt-4 text-[#2D336B] hover:text-[#7886C7] text-sm">
             Forgot Password?
           </button>
         </form>

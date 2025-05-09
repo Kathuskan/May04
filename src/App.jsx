@@ -13,31 +13,30 @@ import { Footer } from './components/Footer.jsx';
 import { Sidebar1 } from './components/Sidebar1.jsx';
 import { Gamification } from './pages/Gamification.jsx';
 import { Dashboard } from './pages/Dashboard.jsx';
+import { AuthProvider } from './AuthContext.jsx';
 
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <Sidebar1 />
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/home' element={<Content />} />
-        <Route path="/addtransactions" element={<Addtransactions />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/gamification" element={<Gamification />} />
-        <Route path="/viewtransactions" element={<Viewtransactions />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/savings' element={<Savings/>}/>
-      </Routes>
-      <Footer/>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Header />
+        <Sidebar1 />
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/home' element={<Content />} />
+          <Route path="/addtransactions" element={<Addtransactions />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/gamification" element={<Gamification />} />
+          <Route path="/viewtransactions" element={<Viewtransactions />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/savings' element={<Savings />} />
+        </Routes>
+        <Footer/>
+      </Router>
+    </AuthProvider>
   );
 };
 
 export default App;
-
-
-
-
