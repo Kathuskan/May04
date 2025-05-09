@@ -10,24 +10,24 @@ export const Addtransactions = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!title || !amount || !category || !description || !userId) {
       alert('Please fill in all fields.');
       return;
     }
-
+  
     try {
-      const response = await axios.post('http://localhost:5001/api/transactions', {
+      const response = await axios.post('http://localhost:3007/api/transactions', {
         title,
         amount: parseFloat(amount), // Ensure amount is a number
         category,
         description,
         userId,
       });
-
+  
       console.log('Response:', response.data);
       alert('Transaction added successfully!');
-
+  
       // Reset form
       setTitle('');
       setAmount('');
@@ -38,7 +38,7 @@ export const Addtransactions = () => {
       alert(`Failed to add transaction: ${error.response?.data?.error || 'Unknown error'}`);
     }
   };
-
+  
   return (
     <main className="my-3 ml-64 mt-28 h-screen bg-[#3674B5] relative">
       <div className="min-h-screen bg-gray-100">
