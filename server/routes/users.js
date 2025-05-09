@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { users } = require('../models');
+const { users } = require('../models'); // ✅ Import only once
 
 // GET all users
 router.get("/", async (req, res) => {
@@ -8,7 +8,25 @@ router.get("/", async (req, res) => {
   res.json(listOfUsers);
 });
 
-// POST new user
+// ✅ Login route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await users.findOne({ where: { email } });
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    return res.json({ message: "Login successful", user });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Login failed", error: err.message });
+  }
+});
+
+// ✅ Register new user
 router.post("/", async (req, res) => {
   try {
     const { firstName, lastName, phone, email, password } = req.body;

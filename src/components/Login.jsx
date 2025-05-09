@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -11,10 +10,9 @@ export const Login = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Style constants
   const inputStyle = 'w-full p-2 border rounded-md focus:ring-2 focus:ring-[#7886C7] focus:outline-none';
   const labelStyle = 'block text-[#2D336B] font-semibold mb-2';
-  const buttonStyle = 'w-full py-2 text-lg bg-[#A9B5DF] text-white rounded-md shadow hover:bg-[#7886C7] transition-colors';
+  const buttonStyle = 'w-full py-2 text-lg bg-[#2D336B] text-white rounded-md shadow hover:bg-[#7886C7] transition-colors';
 
   const validateForm = () => {
     const newErrors = {};
@@ -27,12 +25,9 @@ export const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -46,27 +41,26 @@ export const Login = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:5001/api/login', {
-        email: formData.email,
-        password: formData.password
+      const response = await fetch("http://localhost:3007/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
       });
 
-      // Store the authentication token
-      localStorage.setItem('authToken', response.data.token);
-      
-      // Redirect to dashboard or home page
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Login failed');
+
+      localStorage.setItem('authToken', data.token);
+      alert("Login successful!");
       navigate('/dashboard');
     } catch (error) {
-      setErrors({
-        server: error.response?.data?.message || 'Login failed. Please try again.'
-      });
+      setErrors({ server: error.message });
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleForgotPassword = () => {
-    navigate('/reset-password');
   };
 
   return (
@@ -88,8 +82,7 @@ export const Login = () => {
               id="email"
               name="email"
               className={`${inputStyle} ${errors.email ? 'border-red-500' : ''}`}
-              value={formData.email}
-              onChange={handleInputChange}
+              onChange={handleChange}
               required
             />
             {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
@@ -102,8 +95,7 @@ export const Login = () => {
               id="password"
               name="password"
               className={`${inputStyle} ${errors.password ? 'border-red-500' : ''}`}
-              value={formData.password}
-              onChange={handleInputChange}
+              onChange={handleChange}
               required
             />
             {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
@@ -119,7 +111,7 @@ export const Login = () => {
 
           <button
             type="button"
-            onClick={handleForgotPassword}
+            onClick={() => navigate('/reset-password')}
             className="mt-4 text-[#2D336B] hover:text-[#7886C7] text-sm"
           >
             Forgot Password?
