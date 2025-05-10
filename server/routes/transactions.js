@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Transaction } = require('../models'); // Adjust if your model is named differently
+const { Transaction } = require('../models');
 
-// Get all transactions for a user
 router.get('/:userId', async (req, res) => {
   try {
     const transactions = await Transaction.findAll({
@@ -15,7 +14,6 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
-// Create a new transaction
 router.post('/', async (req, res) => {
   const { title, amount, category, description, userId } = req.body;
   try {

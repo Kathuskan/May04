@@ -17,7 +17,9 @@ app.use("/users", usersRouter);
 app.use('/api/transactions', transactionsRouter);
 
 db.sequelize.sync({ force: true }).then(() => {
-  app.listen(3007, () => {
-    console.log("Server running on port 3007");
+    console.log("✅ Synced DB.");
+    app.listen(3007, () => {
+      console.log("🚀 Server running on http://localhost:3007");
+    });
   });
-});
+  
