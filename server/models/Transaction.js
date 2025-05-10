@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+    }, {
+      // REMOVE THIS LINE if present: timestamps: false
+      tableName: 'Transactions'  // Optional but makes things consistent
     });
   
     return Transaction;

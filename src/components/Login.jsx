@@ -53,6 +53,8 @@ export const Login = () => {
       if (!response.ok) throw new Error(data.message || 'Login failed');
 
       localStorage.setItem('authToken', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user)); // ✅ store user info
+
       login(`${data.user.firstName} ${data.user.lastName}`);
       alert("Login successful!");
       navigate('/dashboard');
