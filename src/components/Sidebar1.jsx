@@ -12,8 +12,8 @@ export const Sidebar1 = () => {
             <Link to='/dashboard' className={linkStyle}><FaChartPie className={styleIcon}/>Dashboard</Link>
             <Link to="/addtransactions" className={linkStyle}> <FaPlus className={styleIcon} />Add Transactions</Link>
             <Link to="/viewtransactions" className={linkStyle}> <FaStackOverflow className={styleIcon}/> View Transactions</Link>
-            <Link to="/savings" className={linkStyle}> <FaPiggyBank className={styleIcon}/>Savings</Link>
-            <Link to="/gamification" className={linkStyle}><FaAward className={styleIcon}/> Badges</Link>
+            {/* <Link to="/savings" className={linkStyle}> <FaPiggyBank className={styleIcon}/>Savings</Link>
+            <Link to="/gamification" className={linkStyle}><FaAward className={styleIcon}/> Badges</Link> */}
             <Link to="/profile" className={linkStyle}><FaUser className={styleIcon} />Profile</Link>
         </div>
     );

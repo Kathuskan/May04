@@ -8,6 +8,7 @@ router.get("/", async (req, res) => {
   res.json(listOfUsers);
 });
 
+
 // ✅ Login route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
