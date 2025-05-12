@@ -7,11 +7,11 @@ import { Addtransactions } from './pages/addtransactions.jsx';
 import { Viewtransactions } from './pages/viewtransactions.jsx';
 import { Content } from './components/Content.jsx';
 import { Signup } from './components/Signup.jsx';
-import { Savings } from './pages/Savings.jsx';
+// import { Savings } from './pages/Savings.jsx';
 import { Login } from './components/Login.jsx';
 import { Footer } from './components/Footer.jsx';
 import { Sidebar1 } from './components/Sidebar1.jsx';
-import { Gamification } from './pages/Gamification.jsx';
+// import { Gamification } from './pages/Gamification.jsx';
 import { Dashboard } from './pages/Dashboard.jsx';
 import { AuthProvider } from './AuthContext.jsx';
 
@@ -27,11 +27,11 @@ const App = () => {
           <Route path='/home' element={<Content />} />
           <Route path="/addtransactions" element={<Addtransactions />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/gamification" element={<Gamification />} />
+          {/* <Route path="/gamification" element={<Gamification />} /> */}
           <Route path="/viewtransactions" element={<Viewtransactions />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/savings' element={<Savings />} />
+          {/* <Route path='/savings' element={<Savings />} /> */}
         </Routes>
         <Footer/>
       </Router>
