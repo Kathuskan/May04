@@ -55,7 +55,7 @@ export const Login = () => {
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('user', JSON.stringify(data.user)); // ✅ store user info
 
-      login(`${data.user.firstName} ${data.user.lastName}`);
+      login(data.user); // ✅ Pass full user object
       alert("Login successful!");
       navigate('/dashboard');
 
