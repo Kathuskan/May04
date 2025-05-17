@@ -3,10 +3,12 @@ import axios from "axios";
 
 export const Viewtransactions = () => {
   const [transactions, setTransactions] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({ title: "", amount: "", category: "income" });
+
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
 
-  // Fetch user transactions
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -20,23 +22,44 @@ export const Viewtransactions = () => {
     if (userId) fetchTransactions();
   }, [userId]);
 
-  // Delete a transaction
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3007/api/transactions/${id}`);
-      setTransactions((prev) => prev.filter((t) => t.id !== id));
+      setTransactions(prev => prev.filter(t => t.id !== id));
     } catch (err) {
       console.error("Failed to delete:", err);
       alert("Failed to delete transaction.");
     }
   };
 
-  // Placeholder update logic
-  const handleUpdate = (id) => {
-    alert(`Transaction ${id} would be updated. Implement update logic or modal.`);
+  const startEditing = (t) => {
+    setEditingId(t.id);
+    setEditData({ title: t.title, amount: t.amount, category: t.category });
   };
 
-  // Generate CSV report
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditData({ title: "", amount: "", category: "income" });
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:3007/api/transactions/${editingId}`, editData);
+      setTransactions(prev =>
+        prev.map(t => (t.id === editingId ? { ...t, ...editData } : t))
+      );
+      cancelEditing();
+    } catch (err) {
+      console.error("Update failed:", err);
+      alert("Failed to update transaction.");
+    }
+  };
+
+  const handleChange = (e) => {
+    setEditData({ ...editData, [e.target.name]: e.target.value });
+  };
+
   const generateReport = () => {
     const csvContent = 'data:text/csv;charset=utf-8,'
       + ['Title,Amount,Category']
@@ -76,25 +99,76 @@ export const Viewtransactions = () => {
                 <tbody>
                   {transactions.map((t) => (
                     <tr key={t.id} className="border-b">
-                      <td className="px-6 py-4">{t.title}</td>
-                      <td className="px-6 py-4 text-sm text-gray-800">
-                        {t.category === "income" ? "+" : "-"}{parseFloat(t.amount).toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 capitalize">{t.category}</td>
-                      <td className="px-6 py-4">
-                        <button
-                          onClick={() => handleUpdate(t.id)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => handleDelete(t.id)}
-                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
+                      {editingId === t.id ? (
+                        <>
+                          <td className="px-6 py-2">
+                            <input
+                              type="text"
+                              name="title"
+                              value={editData.title}
+                              onChange={handleChange}
+                              className="border p-1 rounded w-full"
+                            />
+                          </td>
+                          <td className="px-6 py-2">
+                            <input
+                              type="number"
+                              name="amount"
+                              value={editData.amount}
+                              onChange={handleChange}
+                              className="border p-1 rounded w-full"
+                            />
+                          </td>
+                          <td className="px-6 py-2">
+                            <select
+                              name="category"
+                              value={editData.category}
+                              onChange={handleChange}
+                              className="border p-1 rounded w-full"
+                            >
+                              <option value="income">Income</option>
+                              <option value="expense">Expense</option>
+                            </select>
+                          </td>
+                          <td className="px-6 py-2">
+                            <button
+                              onClick={handleUpdateSubmit}
+                              className="bg-green-600 text-white px-3 py-1 rounded mr-2"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={cancelEditing}
+                              className="bg-gray-500 text-white px-3 py-1 rounded"
+                            >
+                              Cancel
+                            </button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="px-6 py-4">{t.title}</td>
+                          <td className="px-6 py-4">
+                            {t.category === "income" ? "+" : "-"}
+                            {parseFloat(t.amount).toFixed(2)}
+                          </td>
+                          <td className="px-6 py-4 capitalize">{t.category}</td>
+                          <td className="px-6 py-4">
+                            <button
+                              onClick={() => startEditing(t)}
+                              className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() => handleDelete(t.id)}
+                              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
