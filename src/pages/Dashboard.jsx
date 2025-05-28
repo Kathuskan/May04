@@ -122,9 +122,16 @@ export const Dashboard = () => {
                 <Link to='/profile' className="bg-gray-700 text-white py-2 rounded shadow hover:bg-gray-800 text-center">
                   Profile
                 </Link>
-                <Link to='/' className="bg-red-500 text-white py-2 rounded shadow hover:bg-red-600 text-center">
+                <div
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    window.location.href = "/"; // Redirect to landing or login
+                  }}
+                  className="bg-red-500 text-white py-2 rounded shadow hover:bg-red-600 text-center cursor-pointer"
+                >
                   Logout
-                </Link>
+                </div>
+
               </div>
             </section>
           </main>
