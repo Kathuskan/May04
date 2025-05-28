@@ -1,90 +1,92 @@
 import React from 'react';
 import context1 from './Context1.jpg';
 import { Link } from 'react-router-dom';
-
+import context2 from './add.jpg';
+import context3 from './dashboard.jpg';
+import context4 from './11.jpg';
 
 export const Content = () => {
   return (
     <main className="ml-64 my-3 mt-28 relative mr-2">
-      {/* First content block */}
-      <div className="grid grid-flow-col grid-rows-4 gap-4 rounded-md p-10 pr-9 pb-20 relative shadow-lg bg-blue-200 max-h-96">
-        <div className='row-3 mt-7'>
-          <p className="max-w-xl text-xl text-gray-800">
-            Pocket Manager is a user-friendly web application designed exclusively for university students to take control of their finances. With features like a manual transaction tracker, a savings calculator for setting and achieving financial goals, and timely notifications for bill payments or low balances, Pocket Manager helps students develop healthy money habits. The platform's simple interface and goal-oriented tools empower students to track their income and expenses effectively, fostering financial independence and discipline.
+      {/* Intro Block */}
+      <div className="flex bg-blue-200 rounded-md shadow-lg p-10 mb-10 relative">
+        <div className="w-1/2 pr-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to Pocket Manager</h2>
+          <p className="text-gray-700 text-lg">
+            Pocket Manager is your personal finance assistant designed for university students.
+            Track your income and expenses, calculate your savings, and build smart money habits
+            with our simple and effective dashboard.
           </p>
         </div>
-        <div className='row-3'>
+        <div className="w-1/2">
           <img
-            className="absolute right-10 top-4 mt-3 pb-7 rounded-md"
             src={context1}
-            alt="context image"
-            style={{ width: '550px', height: '350px' }}
+            alt="Dashboard preview"
+            className="rounded-md w-full h-80 object-cover"
           />
         </div>
       </div>
 
-      {/* Call-to-action section */}
-      <Link to='/signup' className="hover: ">
-        <div className="text-center text-white text-xl p-10 bg-[#3674B5] m-5 rounded-md">
+      {/* Call to Action */}
+      <Link to='/signup'>
+        <div className="text-center text-white text-xl p-6 bg-[#3674B5] m-5 rounded-md hover:bg-blue-700 transition">
           Start your journey toward smarter money management today!
         </div>
       </Link>
 
-      {/* first function block */}
-      <div className='grid grid-flow-col grid-rows-4 gap-4 rounded-md p-10 pr-9 pb-23 relative shadow-lg bg-blue-200 max-h-96'>
-        <div>
+      {/* Feature 1: Add Transactions */}
+      <div className="flex bg-blue-200 rounded-md shadow-lg p-10 mb-10 relative">
+        <div className="w-1/2">
           <img
-            className="absolute left-10 top-4 mt-3 pb-7 rounded-md"
-            src={context1}
-            alt="context image"
-            style={{ width: '550px', height: '350px' }}
+            src={context4}
+            alt="Add transaction"
+            className="rounded-md w-full h-80 object-cover"
           />
         </div>
-        <div>
-          <p className='text-xl absolute right-30'>Add Transactions Easily</p>
-          <br />
-          <br />
-          <p className='absolute right-30 text-right'>Manually log your income and expenses with a simple form. <br />Categorize your transactions and track them effortlessly.</p>
+        <div className="w-1/2 pl-6 flex flex-col justify-center">
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">Add Transactions Easily</h3>
+          <p className="text-gray-700">
+            Log your income or expenses with a simple form. Categorize each transaction to
+            monitor your financial behavior more effectively.
+          </p>
         </div>
       </div>
 
-      {/* second function block */}
-      <div className="grid grid-flow-col grid-rows-4 gap-4 rounded-md p-10 pr-9 pb-20 mt-3 relative shadow-lg bg-blue-200 max-h-96">
-        <div className='mt-20'>
-          <p className='text-xl absolute left-30'>Add Transactions Easily</p>
-          <br />
-          <br />
-          <p className='absolute left-30 text-left'>Manually log your income and expenses with a simple form. <br />Categorize your transactions and track them effortlessly.</p>
-        </div>
-        <div className='row-3'>
+      {/* Feature 2: Dashboard Insights */}
+      <div className="flex bg-blue-200 rounded-md shadow-lg p-10 mb-10 relative flex-row-reverse">
+        <div className="w-1/2">
           <img
-            className="absolute right-10 top-4 mt-3 pb-7 rounded-md"
-            src={context1}
-            alt="context image"
-            style={{ width: '550px', height: '350px' }}
+            src={context3}
+            alt="Dashboard overview"
+            className="rounded-md w-full h-80 object-cover"
           />
+        </div>
+        <div className="w-1/2 pr-6 flex flex-col justify-center">
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">View Dashboard Insights</h3>
+          <p className="text-gray-700">
+            Your dashboard summarizes your total income, expenses, and current savings.
+            Stay updated with real-time financial overviews.
+          </p>
         </div>
       </div>
 
-      {/* third function block */}
-      <div className='grid grid-flow-col grid-rows-4 gap-4 mt-3 rounded-md p-10 pr-9 pb-23 relative shadow-lg bg-blue-200 max-h-96'>
-        <div>
+      {/* Feature 3: Generate Reports */}
+      <div className="flex bg-blue-200 rounded-md shadow-lg p-10 mb-10 relative">
+        <div className="w-1/2">
           <img
-            className="absolute left-10 top-4 mt-3 pb-7 rounded-md"
-            src={context1}
-            alt="context image"
-            style={{ width: '550px', height: '350px' }}
+            src={context2}
+            alt="Generate report"
+            className="rounded-md w-full h-80 object-cover"
           />
         </div>
-        <div>
-          <p className='text-xl absolute right-30'>Add Transactions Easily</p>
-          <br />
-          <br />
-          <p className='absolute right-30 text-right'>Manually log your income and expenses with a simple form. <br />Categorize your transactions and track them effortlessly.</p>
+        <div className="w-1/2 pl-6 flex flex-col justify-center">
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">Generate Reports</h3>
+          <p className="text-gray-700">
+            Download your financial history as a CSV file. Use it to analyze your habits
+            or share with your financial advisor.
+          </p>
         </div>
       </div>
-
-
     </main>
   );
 };
