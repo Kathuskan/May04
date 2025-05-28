@@ -57,7 +57,7 @@ export const Login = () => {
 
       login(data.user); // ✅ Pass full user object
       alert("Login successful!");
-      navigate('/dashboard');
+      navigate('/home');
 
     } catch (error) {
       setErrors({ server: error.message });

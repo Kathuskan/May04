@@ -28,7 +28,7 @@ export const Content = () => {
       </div>
 
       {/* Call to Action */}
-      <Link to='/signup'>
+      <Link to='/addtransactions'>
         <div className="text-center text-white text-xl p-6 bg-[#3674B5] m-5 rounded-md hover:bg-blue-700 transition">
           Start your journey toward smarter money management today!
         </div>

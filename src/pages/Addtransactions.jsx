@@ -17,12 +17,12 @@ export const Addtransactions = () => {
       alert('Please fill in all fields.');
       return;
     }
-    
+
     if (!userId) {
       alert('User ID not found. Please log in again.');
       return;
     }
-    
+
     try {
       const response = await axios.post('http://localhost:3007/api/transactions', {
         title,
@@ -86,7 +86,9 @@ export const Addtransactions = () => {
                 <option value="">Select Category</option>
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
+                <option value="savings">Savings</option> {/* ✅ New Category */}
               </select>
+
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-semibold mb-2" htmlFor="description">Description</label>

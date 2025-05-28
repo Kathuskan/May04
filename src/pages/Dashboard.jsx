@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export const Dashboard = () => {
-  const [transactions, setTransactions] = useState([]);
   const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
+  const [manualSavings, setManualSavings] = useState(0);
+  const [transactions, setTransactions] = useState([]); // ✅ THIS LINE
+  // from "savings" category
+
+
 
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
@@ -19,18 +23,22 @@ export const Dashboard = () => {
 
         let totalIncome = 0;
         let totalExpenses = 0;
+        let totalSavings = 0;
 
         data.forEach((txn) => {
           const amt = parseFloat(txn.amount);
           if (txn.category === "income") {
             totalIncome += amt;
-          } else {
+          } else if (txn.category === "expense") {
             totalExpenses += amt;
+          } else if (txn.category === "savings") {
+            totalSavings += amt;
           }
         });
 
         setIncome(totalIncome);
         setExpenses(totalExpenses);
+        setManualSavings(totalSavings); // Update state
       } catch (error) {
         console.error("Error fetching transactions", error);
       }
@@ -39,7 +47,9 @@ export const Dashboard = () => {
     if (userId) fetchTransactions();
   }, [userId]);
 
-  const savings = income - expenses;
+
+  const netSavings = income - expenses + manualSavings;
+
 
   return (
     <main className="my-3 ml-64 mt-28 min-h-screen bg-[#3674B5]">
@@ -60,9 +70,13 @@ export const Dashboard = () => {
                 <p className="text-2xl font-bold text-red-500">{expenses.toLocaleString()}</p>
               </div>
               <div className="bg-white p-4 shadow-md rounded-lg">
-                <h2 className="text-lg font-semibold text-gray-700">Savings</h2>
-                <p className="text-2xl font-bold text-green-500">{savings.toLocaleString()}</p>
+                <h2 className="text-lg font-semibold text-gray-700">
+                  Savings <span className="text-sm text-gray-500">(Manual: {manualSavings.toLocaleString()})</span>
+                </h2>
+                <p className="text-2xl font-bold text-green-500">{netSavings.toLocaleString()}</p>
               </div>
+
+
             </section>
 
             <section className="bg-white p-4 shadow-md rounded-lg mb-6">
@@ -71,9 +85,23 @@ export const Dashboard = () => {
                 {transactions.slice(-5).reverse().map((txn) => (
                   <li key={txn.id} className="flex justify-between py-2 border-b">
                     <span>{txn.title}</span>
-                    <span className={txn.category === "income" ? "text-green-500" : "text-red-500"}>
-                      {txn.category === "income" ? "+" : "-"}{txn.amount}
+                    <span
+                      className={
+                        txn.category === "income"
+                          ? "text-green-500"
+                          : txn.category === "expense"
+                            ? "text-red-500"
+                            : "text-blue-500"
+                      }
+                    >
+                      {txn.category === "income"
+                        ? `+${txn.amount}`
+                        : txn.category === "expense"
+                          ? `- ${txn.amount}`
+                          : `+${txn.amount} (Savings)`}
                     </span>
+
+
                   </li>
                 ))}
                 {transactions.length === 0 && (
