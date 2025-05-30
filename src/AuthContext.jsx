@@ -7,13 +7,19 @@ export const AuthProvider = ({ children }) => {
   const userFullName = user ? `${user.firstName} ${user.lastName}` : null;
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser && storedUser !== 'undefined') {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      localStorage.removeItem('user'); // remove corrupted data
     }
   }, []);
 
   const login = (userData) => {
+    if (!userData) return; // prevent setting undefined
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
