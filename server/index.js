@@ -6,6 +6,8 @@ app.use(cors());
 app.use(express.json());
 
 const db = require("./models");
+app.use('/uploads', express.static('uploads'));
+
 
 // Routers
 const usersRouter = require('./routes/users');

@@ -1,6 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { users } = require('../models'); // ✅ Import only once
+const { users } = require('../models');
+const multer = require('multer');
+const path = require('path');
+
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Ensure this folder exists
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
 
 // GET all users
 router.get("/", async (req, res) => {
@@ -8,18 +22,14 @@ router.get("/", async (req, res) => {
   res.json(listOfUsers);
 });
 
-
-// ✅ Login route
+// Login route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await users.findOne({ where: { email } });
-
     if (!user || user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-
     return res.json({ message: "Login successful", user });
   } catch (err) {
     console.error(err);
@@ -27,16 +37,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Register new user
-router.post("/", async (req, res) => {
+// Register new user with image upload
+router.post("/", upload.single('profileImage'), async (req, res) => {
   try {
     const { firstName, lastName, phone, email, password } = req.body;
+    const profileImage = req.file ? req.file.filename : null;
+
     const newUser = await users.create({
       firstName,
       lastName,
       phone,
       email,
       password,
+      profileImage,
     });
     res.status(201).json(newUser);
   } catch (err) {

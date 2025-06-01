@@ -11,10 +11,12 @@ export const Signup = () => {
     password: '',
     confirmPassword: ''
   });
+  const [profileImage, setProfileImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Style constants with direct hex color usage
+  // Style constants
   const inputStyle = 'w-full p-2 border rounded-md focus:ring-2 focus:ring-[#7886C7] focus:outline-none';
   const labelStyle = 'block text-[#2D336B] font-semibold mb-2';
   const buttonStyle = 'w-full py-2 text-lg bg-[#2D336B] text-white rounded-md shadow hover:bg-[#7886C7] transition-colors';
@@ -42,30 +44,42 @@ export const Signup = () => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+
+    // Optional: Image preview
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
 
     try {
+      // Use FormData for file upload
+      const form = new FormData();
+      Object.entries(formData).forEach(([key, value]) => form.append(key, value));
+      if (profileImage) form.append('profileImage', profileImage);
+
       const response = await fetch("http://localhost:3007/users", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-          email: formData.email,
-          password: formData.password
-        }),
+        body: form,
       });
 
       const data = await response.json();
@@ -99,6 +113,7 @@ export const Signup = () => {
               id="firstName"
               name="firstName"
               className={`${inputStyle} ${errors.firstName ? 'border-red-500' : ''}`}
+              value={formData.firstName}
               onChange={handleChange}
               required
             />
@@ -112,6 +127,7 @@ export const Signup = () => {
               id="lastName"
               name="lastName"
               className={`${inputStyle} ${errors.lastName ? 'border-red-500' : ''}`}
+              value={formData.lastName}
               onChange={handleChange}
               required
             />
@@ -125,6 +141,7 @@ export const Signup = () => {
               id="phone"
               name="phone"
               className={`${inputStyle} ${errors.phone ? 'border-red-500' : ''}`}
+              value={formData.phone}
               onChange={handleChange}
               required
             />
@@ -138,6 +155,7 @@ export const Signup = () => {
               id="email"
               name="email"
               className={`${inputStyle} ${errors.email ? 'border-red-500' : ''}`}
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -151,6 +169,7 @@ export const Signup = () => {
               id="password"
               name="password"
               className={`${inputStyle} ${errors.password ? 'border-red-500' : ''}`}
+              value={formData.password}
               onChange={handleChange}
               required
             />
@@ -164,10 +183,31 @@ export const Signup = () => {
               id="confirmPassword"
               name="confirmPassword"
               className={`${inputStyle} ${errors.confirmPassword ? 'border-red-500' : ''}`}
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
             {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword}</span>}
+          </div>
+
+          {/* Profile Image Upload */}
+          <div className='mb-6'>
+            <label htmlFor="profileImage" className={labelStyle}>Profile Picture (optional)</label>
+            <input
+              type="file"
+              id="profileImage"
+              name="profileImage"
+              accept="image/*"
+              onChange={handleFileChange}
+              className={inputStyle}
+            />
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="mt-2 w-24 h-24 rounded-full object-cover border"
+              />
+            )}
           </div>
 
           <button
