@@ -23,14 +23,18 @@ export const Viewtransactions = () => {
   }, [userId]);
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3007/api/transactions/${id}`);
-      setTransactions(prev => prev.filter(t => t.id !== id));
-    } catch (err) {
-      console.error("Failed to delete:", err);
-      alert("Failed to delete transaction.");
-    }
-  };
+  const confirmDelete = window.confirm("Are you sure you want to delete this transaction?");
+  if (!confirmDelete) return;
+
+  try {
+    await axios.delete(`http://localhost:3007/api/transactions/${id}`);
+    setTransactions(prev => prev.filter(t => t.id !== id));
+  } catch (err) {
+    console.error("Failed to delete:", err);
+    alert("Failed to delete transaction.");
+  }
+};
+
 
   const startEditing = (t) => {
     setEditingId(t.id);
